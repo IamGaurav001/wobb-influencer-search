@@ -70,11 +70,39 @@ Complete the following as part of your submission:
 
 ## Submission Notes
 
-- Document any assumptions or trade-offs in your README
-- Ensure `npm run build` passes before submitting
-- Focus on demonstrating your judgment — not every possible feature needs to be built, but the core assignment items should be addressed thoughtfully
-- Double-check that your repo is public (or that we have access) and that the link is included in your submission
-- Please make meaningful commits throughout your work. We may review your commit history.
-- **Bonus:** Deploying the app (e.g. Vercel, Netlify, GitHub Pages) is optional but will be considered a plus — include the live URL in your submission if you do
+### What Was Changed & Solved
+1. **Core Bug Fixes:**
+   - **Case-Insensitive Search:** Fixed username filtering in `src/utils/dataHelpers.ts` to use `.toLowerCase()` matching.
+   - **Engagement Rate Calculation:** Fixed the $100\times$ multiplier math bug in `ProfileDetailPage.tsx`.
+   - **Engagements Field:** Corrected the count field rendering total engagements as a formatted raw number (e.g. `1,320,790`) rather than formatting it as a rate.
+   - **URL Platform Fallback:** Resolved missing query param crashes by falling back to the metadata `user.type` values inside loaded profile JSON files.
+   - **Dynamic Import File Casing:** Solved dynamic lookup crash on case-sensitive filesystems by performing case-insensitive key searches in `src/utils/profileLoader.ts`.
+   - **Responsive Layout:** Replaced the layout-breaking fixed width `w-[700px]` with responsive layout grids (`w-full max-w-xl`).
+   - **Wildcard Catch-All Route:** Added a catch-all route redirecting invalid URLs back to home.
+   - **Dead Code Cleanup:** Deleted the unused/unimported `SearchBar.tsx` component.
+2. **State Management (Zustand):**
+   - Built a custom store at `src/store/useStore.ts` utilizing Zustand's `persist` middleware for automatic `localStorage` synchronization. Added strict duplicate check validations.
+3. **UI/UX Redesign:**
+   - Added a sliding sidebar drawer (`SelectedSidebar.tsx`) to manage selection lists.
+   - Designed responsive cards with premium platform brand colors and custom glassmorphism styling tokens.
+   - Created a sticky header navigation bar containing selected counts and animated indicators.
+4. **Reusable Common UI Components:**
+   - **Avatar (`common/Avatar.tsx`):** Automated image load error handling; dynamically parses name initials and applies a hashed gradient background as a fallback.
+   - **StatCard (`common/StatCard.tsx`):** Unified metadata cards display.
+   - **Button (`common/Button.tsx`):** Premium button component supporting ghost, outline, and loading indicator states.
+5. **Performance & Optimization:**
+   - Removed state-induced page-wide click counters (`clickCount`), substituting them with `useRef`.
+   - Removed prop-drilled `searchQuery` keys to avoid unnecessary rendering loops on character inputs.
+   - Utilized React's `memo` and `useCallback` to enforce rendering isolation.
 
-Good luck!
+### Libraries Added
+- **Zustand** (`^5.0.3`): Exclusively used for robust, persistent state management.
+
+### Assumptions & Trade-Offs
+- **Platform Detection:** In selected lists, the profile summary data lacks platform identifiers. Rather than modifying the JSON structure, we wrote a helper parsing the social profiles' domain URLs (`instagram.com`, `youtube.com`, `tiktok.com`) to dynamically detect brand contexts.
+- **Verbatim Module Syntax:** Kept the project configuration strict, modifying imports to type-only declarations to enforce compiler directives.
+
+### Remaining Improvements
+- Add search result debouncing on input fields.
+- Integrate drag-and-drop ordering inside the Selected List panel.
+
