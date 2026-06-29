@@ -1,8 +1,15 @@
 {
-  "name": "wobb-assignment",
+  "name": "creatorscope",
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "author": "Gaurav Kumar Dubey",
+  "license": "MIT",
+  "homepage": "https://creatorscope-wobb.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/IamGaurav001/wobb-influencer-search.git"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
