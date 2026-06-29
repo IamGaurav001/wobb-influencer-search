@@ -88,6 +88,7 @@ export function SelectedSidebar({ isOpen, onClose }: SelectedSidebarProps) {
 
           {/* Sidebar Drawer — bottom sheet on mobile, right panel on desktop */}
           <motion.aside
+            id="saved-creators-sidebar"
             initial={variants.initial}
             animate={variants.animate}
             exit={variants.exit}
@@ -138,12 +139,15 @@ export function SelectedSidebar({ isOpen, onClose }: SelectedSidebarProps) {
                     value={drawerQuery}
                     onChange={(e) => setDrawerQuery(e.target.value)}
                     placeholder="Search shortlisted creators..."
+                    aria-label="Search shortlisted creators"
                     className="w-full pl-9 pr-8 py-2 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-white/[0.06] rounded-xl text-xs text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/10 transition-all"
                   />
                   {drawerQuery && (
                     <button
                       onClick={() => setDrawerQuery("")}
-                      className="absolute inset-y-0 right-0 pr-3 flex items-center text-zinc-400 hover:text-zinc-600 cursor-pointer"
+                      type="button"
+                      aria-label="Clear search query"
+                      className="absolute inset-y-0 right-0 pr-3 flex items-center text-zinc-400 hover:text-zinc-600 cursor-pointer focus:outline-none focus:text-purple-600 rounded-lg"
                     >
                       <X className="h-3.5 w-3.5" />
                     </button>

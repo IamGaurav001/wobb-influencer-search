@@ -77,6 +77,7 @@ export function PlatformFilter({
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder={`Search ${getPlatformLabel(selected)} creators by handle or name...`}
+          aria-label={`Search ${getPlatformLabel(selected)} creators by handle or name`}
           className="w-full pl-11 pr-4 sm:pr-16 py-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-white/[0.06] rounded-xl text-sm text-zinc-900 dark:text-zinc-50 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:border-purple-500 focus:ring-4 focus:ring-purple-500/10 focus:shadow-xl focus:shadow-purple-500/[0.02] shadow-sm transition-all duration-200"
         />
 
@@ -84,7 +85,8 @@ export function PlatformFilter({
           <button
             onClick={() => onSearchChange("")}
             type="button"
-            className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 cursor-pointer"
+            aria-label="Clear search query"
+            className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-zinc-400 hover:text-zinc-650 dark:hover:text-zinc-300 cursor-pointer transition-colors focus:outline-none focus:text-purple-600 rounded-lg"
           >
             <svg
               className="h-4.5 w-4.5"

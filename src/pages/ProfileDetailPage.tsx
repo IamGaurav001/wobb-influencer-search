@@ -16,7 +16,8 @@ import {
 import { motion } from "framer-motion";
 import { PlatformBadge } from "@/components/common/PlatformBadge";
 
-function fmt(count: number) {
+function fmt(count: number | undefined | null) {
+  if (count == null || isNaN(count)) return "N/A";
   if (count >= 1_000_000) return (count / 1_000_000).toFixed(2) + "M";
   if (count >= 1_000) return (count / 1_000).toFixed(1) + "K";
   return count.toLocaleString();
@@ -66,7 +67,7 @@ export function ProfileDetailPage() {
   );
 
   const user: FullUserProfile = profileData.data.user_profile;
-  const platform = (searchParams.get("platform") || user.type || "unknown") as Platform;
+  const platform = (searchParams.get("platform") || user.type || "unknown").toLowerCase() as Platform;
   const isSelected = selectedProfiles.some((p) => p.user_id === user.user_id);
 
   const toggle = () => isSelected ? removeProfile(user.user_id) : addProfile(user);

@@ -85,6 +85,8 @@ export function Layout({ children, title }: LayoutProps) {
             <button
               type="button"
               onClick={() => setIsSidebarOpen(true)}
+              aria-expanded={isSidebarOpen}
+              aria-controls="saved-creators-sidebar"
               className={`relative flex items-center gap-1.5 px-2.5 sm:px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
                 isSidebarOpen
                   ? "text-purple-600 dark:text-purple-400"
@@ -120,8 +122,9 @@ export function Layout({ children, title }: LayoutProps) {
             <button
               type="button"
               onClick={toggleTheme}
-              className="relative flex items-center justify-between bg-zinc-200/80 dark:bg-zinc-900 border border-zinc-300 dark:border-white/[0.12] w-16 h-9 cursor-pointer p-1.5 rounded-full shadow-inner select-none pointer-events-auto transition-all"
               aria-label="Toggle Theme"
+              aria-pressed={theme === "dark"}
+              className="relative flex items-center justify-between bg-zinc-200/80 dark:bg-zinc-900 border border-zinc-300 dark:border-white/[0.12] w-16 h-9 cursor-pointer p-1.5 rounded-full shadow-inner select-none pointer-events-auto transition-all"
             >
               {/* Sliding bubble - animated automatically via Framer Motion layout */}
               <motion.div

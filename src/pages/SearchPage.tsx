@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useMemo, useRef, useEffect } from "react";
 import type { Platform } from "@/types";
 import { Layout } from "@/components/Layout";
 import { PlatformFilter } from "@/components/PlatformFilter";
@@ -33,20 +33,23 @@ export function SearchPage() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  const allProfiles = extractProfiles(platform);
-  const filtered = filterProfiles(allProfiles, searchQuery);
+  const allProfiles = useMemo(() => extractProfiles(platform), [platform]);
+  const filtered = useMemo(() => filterProfiles(allProfiles, searchQuery), [allProfiles, searchQuery]);
 
   // Compute platform statistics dynamically
-  const totalPlatformReach = allProfiles.reduce((sum, p) => sum + p.followers, 0);
+  const totalPlatformReach = useMemo(() => allProfiles.reduce((sum, p) => sum + p.followers, 0), [allProfiles]);
   
-  const validRates = allProfiles.filter((p) => p.engagement_rate !== undefined);
-  const avgPlatformEngagement =
-    validRates.length > 0
+  const avgPlatformEngagement = useMemo(() => {
+    const validRates = allProfiles.filter((p) => p.engagement_rate !== undefined);
+    return validRates.length > 0
       ? validRates.reduce((sum, p) => sum + (p.engagement_rate || 0), 0) / validRates.length
       : 0;
+  }, [allProfiles]);
 
-  const savedCount = useStore((state) => 
-    state.selectedProfiles.filter(p => getPlatformFromUrl(p.url) === platform).length
+  const savedProfilesForPlatform = useStore((state) => state.selectedProfiles);
+  const savedCount = useMemo(() => 
+    savedProfilesForPlatform.filter(p => getPlatformFromUrl(p.url) === platform).length,
+    [savedProfilesForPlatform, platform]
   );
 
   const handleProfileClick = useCallback(() => {
