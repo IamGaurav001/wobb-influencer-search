@@ -70,7 +70,7 @@ export function SearchPage() {
           initial={{ opacity: 0, y: -15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="max-w-4xl mx-auto text-center space-y-3"
+          className="max-w-3xl mx-auto text-center space-y-3"
         >
           {/* Badge */}
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-purple-200/50 dark:border-white/[0.06] bg-purple-500/5 backdrop-blur-md text-xs font-black text-purple-700 dark:text-purple-400 select-none">

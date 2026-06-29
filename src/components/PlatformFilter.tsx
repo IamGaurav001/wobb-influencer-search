@@ -24,7 +24,7 @@ export function PlatformFilter({
   inputRef,
 }: PlatformFilterProps) {
   return (
-    <div className="w-full max-w-2xl mx-auto mb-10 space-y-6">
+    <div className="w-full max-w-3xl mx-auto mb-10 space-y-6">
       {/* Premium Segmented Platform Tabs with active slider indicator */}
       <div className="bg-zinc-100 dark:bg-zinc-900 border border-zinc-200/50 dark:border-white/[0.04] p-1 rounded-2xl flex items-center justify-between w-full max-w-sm mx-auto shadow-inner select-none relative h-11.5">
         {PLATFORMS.map((p) => {
@@ -54,7 +54,7 @@ export function PlatformFilter({
       </div>
 
       {/* Modern Search bar wrapper with icon and command shortcut */}
-      <div className="relative max-w-[760px] mx-auto">
+      <div className="relative max-w-[900px] mx-auto">
         <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-400 dark:text-zinc-500">
           <svg
             className="h-5 w-5"
