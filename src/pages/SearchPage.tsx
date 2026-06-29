@@ -153,10 +153,10 @@ export function SearchPage() {
         transition={{ delay: 0.2 }}
         className="flex items-center justify-between mb-4 w-full border-b border-border pb-2 text-left"
       >
-        <span className="text-[11px] sm:text-xs text-zinc-400 dark:text-zinc-500 font-extrabold uppercase tracking-wider">
+        <span className="text-[11px] sm:text-xs text-zinc-500 dark:text-zinc-400 font-extrabold uppercase tracking-wider">
           🔍 Creator Discovery
         </span>
-        <span className="text-[11px] sm:text-xs text-zinc-400 dark:text-zinc-500 font-bold uppercase tracking-wider">
+        <span className="text-[11px] sm:text-xs text-zinc-500 dark:text-zinc-400 font-bold uppercase tracking-wider">
           {filtered.length === allProfiles.length
             ? `${allProfiles.length} Influencers Available`
             : `${filtered.length} of ${allProfiles.length} Influencers Matched`}

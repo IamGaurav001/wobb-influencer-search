@@ -82,10 +82,10 @@ export const ProfileCard = memo(function ProfileCard({
             </span>
             <VerifiedBadge verified={profile.is_verified} />
           </div>
-          <div className="text-xs text-zinc-400 dark:text-zinc-500 font-medium">
+          <div className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">
             @{profile.username}
           </div>
-          <div className="text-[11px] sm:text-xs text-zinc-400 dark:text-zinc-500 mt-1 font-semibold">
+          <div className="text-[11px] sm:text-xs text-zinc-500 dark:text-zinc-400 mt-1 font-semibold">
             {meta.country}
           </div>
         </div>
@@ -94,7 +94,7 @@ export const ProfileCard = memo(function ProfileCard({
       {/* Stats Section */}
       <div className="grid grid-cols-2 gap-2 bg-zinc-50/50 dark:bg-zinc-900/30 p-3 rounded-2xl border border-zinc-200/40 dark:border-white/[0.03]">
         <div className="text-center">
-          <div className="text-[10px] sm:text-xs text-zinc-400 dark:text-zinc-500 font-bold uppercase tracking-wider">
+          <div className="text-[10px] sm:text-xs text-zinc-500 dark:text-zinc-400 font-bold uppercase tracking-wider">
             Followers
           </div>
           <div className="text-sm sm:text-base font-extrabold text-zinc-900 dark:text-zinc-100 mt-0.5">
@@ -102,7 +102,7 @@ export const ProfileCard = memo(function ProfileCard({
           </div>
         </div>
         <div className="text-center border-l border-zinc-200/50 dark:border-white/[0.04]">
-          <div className="text-[10px] sm:text-xs text-zinc-400 dark:text-zinc-500 font-bold uppercase tracking-wider">
+          <div className="text-[10px] sm:text-xs text-zinc-500 dark:text-zinc-400 font-bold uppercase tracking-wider">
             Engagement
           </div>
           <div className="text-sm sm:text-base font-extrabold text-zinc-900 dark:text-zinc-100 mt-0.5">

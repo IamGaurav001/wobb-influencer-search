@@ -59,7 +59,7 @@ export function StatCard({
       <div className="absolute top-0 right-0 w-20 h-20 rounded-full opacity-20 blur-2xl pointer-events-none bg-current" />
 
       <div className="flex justify-between items-start mb-3">
-        <span className="text-[10.5px] sm:text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+        <span className="text-[10.5px] sm:text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
           {label}
         </span>
         {icon && (
@@ -73,7 +73,7 @@ export function StatCard({
           {value}
         </div>
         {description && (
-          <p className="text-[10.5px] sm:text-xs text-zinc-400 dark:text-zinc-500 mt-1.5 font-normal line-clamp-1">
+          <p className="text-[10.5px] sm:text-xs text-zinc-500 dark:text-zinc-400 mt-1.5 font-normal line-clamp-1">
             {description}
           </p>
         )}

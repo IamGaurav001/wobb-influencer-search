@@ -222,7 +222,7 @@ export function ProfileDetailPage() {
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">
+                    <span className="text-[10px] font-black text-zinc-500 dark:text-zinc-400 uppercase tracking-widest">
                       {stat.label}
                     </span>
                     <span className={`p-1.5 rounded-lg ${stat.highlight ? "bg-purple-500/10 text-purple-500" : "bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400"}`}>

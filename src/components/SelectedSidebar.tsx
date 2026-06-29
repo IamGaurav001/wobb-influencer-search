@@ -213,7 +213,7 @@ export function SelectedSidebar({ isOpen, onClose }: SelectedSidebarProps) {
                             )}
                           </div>
                           <div className="flex items-center gap-2 mt-0.5">
-                            <span className="text-xs text-zinc-400 dark:text-zinc-500 truncate">
+                            <span className="text-xs text-zinc-500 dark:text-zinc-400 truncate">
                               @{profile.username}
                             </span>
                             <PlatformBadge platform={platform as Platform} className="text-[7.5px] px-1.5 py-0.25 rounded" />
