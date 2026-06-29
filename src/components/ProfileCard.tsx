@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import type { Platform, UserProfileSummary } from "@/types";
 import { VerifiedBadge } from "./VerifiedBadge";
+import { useStore } from "@/store/useStore";
 
 interface ProfileCardProps {
   profile: UserProfileSummary;
@@ -22,10 +23,22 @@ export function ProfileCard({
   onProfileClick,
 }: ProfileCardProps) {
   const navigate = useNavigate();
+  const isSelected = useStore((state) => state.isSelected(profile.user_id));
+  const addProfile = useStore((state) => state.addProfile);
+  const removeProfile = useStore((state) => state.removeProfile);
 
   const handleClick = () => {
     if (onProfileClick) onProfileClick(profile.username);
     navigate(`/profile/${profile.username}?platform=${platform}`);
+  };
+
+  const handleAddToggle = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (isSelected) {
+      removeProfile(profile.user_id);
+    } else {
+      addProfile(profile);
+    }
   };
 
   return (
@@ -43,14 +56,16 @@ export function ProfileCard({
         <div className="text-sm text-gray-600">{profile.fullname}</div>
         <div className="text-sm">{formatFollowersLocal(profile.followers)}</div>
       </div>
-      {/* TODO: candidates must implement Add to List feature */}
-      {/* TODO: candidates must implement Add to List feature */}
       <button
-        disabled
-        className="px-3 py-1 bg-gray-300 text-gray-500 text-sm rounded cursor-not-allowed"
-        onClick={(e) => e.stopPropagation()}
+        type="button"
+        onClick={handleAddToggle}
+        className={`px-3 py-1.5 text-xs font-semibold rounded transition-all duration-200 cursor-pointer ${
+          isSelected
+            ? "bg-purple-600 hover:bg-purple-700 text-white"
+            : "bg-gray-100 hover:bg-gray-200 text-gray-800"
+        }`}
       >
-        Add to List
+        {isSelected ? "Added" : "Add to List"}
       </button>
     </div>
   );

@@ -5,6 +5,7 @@ import { VerifiedBadge } from "@/components/VerifiedBadge";
 import type { FullUserProfile, ProfileDetailResponse } from "@/types";
 import { formatEngagementRate, formatNumber } from "@/utils/formatters";
 import { loadProfileByUsername } from "@/utils/profileLoader";
+import { useStore } from "@/store/useStore";
 
 function formatFollowersDetail(count: number) {
   if (count >= 1000000) return (count / 1000000).toFixed(2) + "M";
@@ -61,6 +62,18 @@ export function ProfileDetailPage() {
 
   const user: FullUserProfile = profileData.data.user_profile;
   const platform = searchParams.get("platform") || user.type || "unknown";
+
+  const isSelected = useStore((state) => state.isSelected(user.user_id));
+  const addProfile = useStore((state) => state.addProfile);
+  const removeProfile = useStore((state) => state.removeProfile);
+
+  const handleAddToggle = () => {
+    if (isSelected) {
+      removeProfile(user.user_id);
+    } else {
+      addProfile(user);
+    }
+  };
 
   return (
     <Layout title={user.fullname}>
@@ -146,13 +159,16 @@ export function ProfileDetailPage() {
             </a>
           )}
 
-          {/* TODO: candidates must implement Add to List feature */}
-          {/* TODO: candidates must implement Add to List feature */}
           <button
-            disabled
-            className="block mt-4 px-4 py-2 bg-gray-300 text-gray-500 rounded cursor-not-allowed"
+            type="button"
+            onClick={handleAddToggle}
+            className={`block mt-4 px-4 py-2 text-sm font-semibold rounded transition-all duration-200 cursor-pointer ${
+              isSelected
+                ? "bg-purple-600 hover:bg-purple-700 text-white"
+                : "bg-gray-100 hover:bg-gray-200 text-gray-800"
+            }`}
           >
-            Add to List
+            {isSelected ? "Added" : "Add to List"}
           </button>
         </div>
       </div>
