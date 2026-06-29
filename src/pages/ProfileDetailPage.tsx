@@ -24,6 +24,10 @@ export function ProfileDetailPage() {
     null
   );
   const [loaded, setLoaded] = useState(false);
+  
+  const addProfile = useStore((state) => state.addProfile);
+  const removeProfile = useStore((state) => state.removeProfile);
+  const selectedProfiles = useStore((state) => state.selectedProfiles);
 
   useEffect(() => {
     if (!username) return;
@@ -82,9 +86,8 @@ export function ProfileDetailPage() {
 
   const user: FullUserProfile = profileData.data.user_profile;
   const platform = (searchParams.get("platform") || user.type || "unknown") as Platform;
-  const isSelected = useStore((state) => state.isSelected(user.user_id));
-  const addProfile = useStore((state) => state.addProfile);
-  const removeProfile = useStore((state) => state.removeProfile);
+  
+  const isSelected = selectedProfiles.some((p) => p.user_id === user.user_id);
 
   const handleAddToggle = () => {
     if (isSelected) {
