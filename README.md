@@ -1,108 +1,202 @@
-# Wobb Frontend Assignment
+# CreatorScope — Influencer Discovery Platform
 
-A starter influencer search application built with **React**, **TypeScript**, **Vite**, and **Tailwind CSS**. This project is intentionally left in a rough-but-working state for candidates to improve.
+> Discover, analyze, and shortlist the world's top social media creators across Instagram, YouTube, and TikTok.
 
-## Getting Started
+🔗 **Live Demo:** [https://wobb-influencer-search.vercel.app](https://wobb-influencer-search.vercel.app)
+
+---
+
+## Project Overview
+
+**CreatorScope** is a premium influencer search and analytics platform built for talent and marketing teams. It enables users to search and filter creators by platform, view detailed profile analytics, and build a persistent shortlist — all in a fast, beautiful, single-page experience.
+
+This project was built as a complete redesign of the Wobb frontend assignment — transforming a rough starter into a production-quality product.
+
+---
+
+## Features
+
+- 🔍 **Instant Search** — Case-insensitive search by full name or username with live results
+- 🎛️ **Platform Filtering** — Switch between Instagram, YouTube, and TikTok; search resets on switch
+- 📊 **Dashboard Analytics** — Per-platform stats: total creators, total reach, avg engagement, saved count
+- 👤 **Profile Detail Page** — Full stats view: followers, engagement rate, posts, avg likes/comments/views, total engagements
+- 💾 **Persistent Shortlist** — Save/remove creators; list persists across sessions via localStorage
+- 📱 **Responsive Design** — Mobile bottom sheet, tablet/desktop right drawer
+- 🌙 **Dark/Light Mode** — System preference detection, manual toggle, no flash on load
+- ✅ **Duplicate Prevention** — Toast notifications on add/remove/clear
+- ⌨️ **Keyboard Shortcut** — `⌘K` / `Ctrl+K` to focus search
+- 🎨 **No-scroll Profile View** — Two-column layout fits in one viewport
+
+---
+
+## Tech Stack
+
+| Category | Technology |
+|---|---|
+| Framework | React 19 + TypeScript |
+| Build Tool | Vite 8 |
+| Styling | Tailwind CSS v4 (Vanilla CSS tokens) |
+| Routing | React Router DOM v7 |
+| State Management | Zustand v5 + persist middleware |
+| Animations | Framer Motion v12 |
+| Icons | Lucide React |
+| Notifications | Sonner |
+| Deployment | Vercel |
+
+---
+
+## Folder Structure
+
+```
+src/
+├── assets/
+│   └── data/
+│       ├── search/         # Platform search results (instagram, youtube, tiktok JSON)
+│       └── profiles/       # Individual profile detail JSON files
+├── components/
+│   ├── common/
+│   │   ├── Avatar.tsx      # Auto-fallback initials avatar with gradient hash
+│   │   ├── Button.tsx      # Polymorphic button: primary, secondary, outline, ghost
+│   │   ├── PlatformBadge.tsx
+│   │   └── StatCard.tsx    # Metric display card
+│   ├── Layout.tsx          # Floating glass navbar + sidebar trigger
+│   ├── PlatformFilter.tsx  # Platform tabs + search input
+│   ├── ProfileCard.tsx     # Grid card with save/view actions
+│   ├── ProfileList.tsx     # Responsive profile grid + empty state
+│   ├── SelectedSidebar.tsx # Bottom sheet (mobile) / right drawer (desktop)
+│   └── VerifiedBadge.tsx
+├── constants/              # Platform brands, influencer meta mapping
+├── hooks/                  # useTheme hook
+├── pages/
+│   ├── SearchPage.tsx      # Home: hero, stats, filter, grid
+│   └── ProfileDetailPage.tsx # Detail: two-column no-scroll layout
+├── store/
+│   └── useStore.ts         # Zustand store with localStorage persistence
+├── types/
+│   └── index.ts            # TypeScript interfaces
+├── utils/
+│   ├── dataHelpers.ts      # Extract + filter profiles, platform helpers
+│   ├── formatters.ts       # Number/rate formatting utilities
+│   └── profileLoader.ts    # Dynamic profile JSON loader
+├── App.tsx                 # Router setup + Toaster
+├── index.css               # CSS custom properties, design tokens, global styles
+└── main.tsx                # Entry point with no-flash theme init
+```
+
+---
+
+## Installation
 
 ```bash
+# Clone the repo
+git clone https://github.com/IamGaurav001/wobb-influencer-search.git
+cd wobb-influencer-search
+
+# Install dependencies
 npm install
+
+# Start development server
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173) to view the app.
+Open [http://localhost:5173](http://localhost:5173)
 
-## What's Included
+```bash
+# Build for production
+npm run build
 
-- **Search / Dashboard** — filter influencers by platform (Instagram, YouTube, TikTok) and search by username or full name
-- **Profile Details** — click a profile to view extended data loaded from individual JSON files
-- **Routing** — `react-router-dom` with `/` (search) and `/profile/:username` (details)
+# Lint
+npm run lint
+```
 
-Sample data lives in:
+---
 
-- `src/assets/data/search/` — platform search results (10 profiles each)
-- `src/assets/data/profiles/` — detailed profile JSON per username
+## Architecture
 
-## How to Submit
+### Data Flow
 
-1. **Download or clone** this starter project to your machine.
-2. **Create a new repository** on your own GitHub account. Do not fork the original assignment repo — push your work to a repo you own.
-3. Complete the tasks below and push your changes to that repository.
-4. **Share the public GitHub repository URL** with us as your submission.
+```
+JSON Files (src/assets/data/)
+    ↓
+dataHelpers.ts (extractProfiles, filterProfiles)
+    ↓
+SearchPage → PlatformFilter + ProfileList
+    ↓
+ProfileCard (navigate to detail page)
+    ↓
+ProfileDetailPage ← profileLoader.ts (dynamic import by username)
+```
 
-### Deadline (strict)
+### Theme System
 
-- **Due:** **2 July 2026, 2:00 PM IST** (Indian Standard Time, UTC+5:30)
-- **Any git commits made after this deadline will disqualify your submission.** We will only consider the repository state as of the deadline; late commits will not be reviewed.
-- Make sure your final work is pushed **before** the cutoff.
+- CSS custom properties defined in `:root` and `html.dark`
+- Mapped to Tailwind via `@theme` block
+- `main.tsx` applies the correct class synchronously before React renders → **zero flash**
+- `useTheme` hook exposes `{ theme, toggleTheme }`
 
-## AI Usage
+---
 
-You may use any AI tools (Cursor, ChatGPT, Claude, GitHub Copilot, etc.). We are evaluating your final solution and engineering decisions.
+## State Management
 
-## Your Tasks
+**Zustand** is used for the global selected creators list:
 
-Complete the following as part of your submission:
+```ts
+useStore = create(persist((set, get) => ({
+  selectedProfiles: [],
+  addProfile:    (profile) => { /* dedup check + toast */ },
+  removeProfile: (userId)  => { /* filter + toast */ },
+  clearProfiles: ()        => { /* reset + toast */ },
+  isSelected:    (userId)  => { /* boolean check */ },
+}), { name: "wobb-selected-influencers" }))
+```
 
-1. **Find and fix all bugs and quality issues** — the codebase contains intentional bugs and quality issues. Identify and resolve them.
+- `persist` middleware auto-syncs to `localStorage`
+- Survives page refresh, tab close, and browser restart
+- Duplicate prevention handled inside `addProfile`
 
-2. **Completely redesign the UI/UX** — replace the basic layout with a polished, modern interface. Focus on usability, visual hierarchy, and delight.
+---
 
-3. **Replace React Context with Zustand** — when you implement state management for the selected list, use [Zustand](https://github.com/pmndrs/zustand) instead of React Context.
+## Screenshots
 
-4. **Implement "Select profile & Add to List"** — the disabled "Add to List" button is a stub. Build the full feature:
-   - Select / add profiles to a persistent list
-   - View and manage the selected list
-   - Handle duplicates appropriately
+> The app features a premium dark/light themed interface.
 
-5. **Improve code quality and project structure** — refactor as needed, add proper types, and follow React best practices.
+| View | Description |
+|---|---|
+| Home (Dark) | Hero, analytics stats, platform switcher, creator grid |
+| Home (Light) | Same layout with light glassmorphic styling |
+| Profile Detail | Two-column no-scroll layout with full analytics |
+| Shortlist Sidebar | Bottom sheet on mobile, right drawer on desktop |
 
-6. **Optimize performance** — apply sensible optimizations where appropriate.
+---
 
-7. **Use any libraries you need** — you are not limited to the current stack. Choose tools that help you deliver a great result (UI kits, state managers, testing libraries, etc.).
+## Key Bug Fixes
+
+1. **Case-insensitive search** — `.toLowerCase()` applied to both sides of filter
+2. **Engagement rate display** — Fixed `×100` multiplier rendering raw decimal as percentage
+3. **Avatar fallback** — Auto-generates initials + gradient when image fails to load
+4. **No flash of wrong theme** — Theme class applied synchronously in `main.tsx` before React mounts
+5. **Platform URL detection** — Parses `instagram.com` / `youtube.com` / `tiktok.com` from profile URLs
+6. **Profile page refresh** — Direct URL and hard refresh both work via proper routing config
+7. **Mobile sidebar** — Replaced full-screen overlay with responsive bottom sheet
+
+---
+
+## Future Improvements
+
+- Search debouncing (300ms) to reduce redundant filter runs on keystroke
+- Drag-and-drop reordering inside the shortlist
+- Export shortlist as CSV / PDF
+- Pagination or infinite scroll for larger datasets
+- Real API integration replacing static JSON files
+- Unit tests with Vitest + React Testing Library
+
+---
 
 ## Scripts
 
-| Command        | Description              |
-| -------------- | ------------------------ |
-| `npm run dev`  | Start development server |
-| `npm run build`| Production build         |
-| `npm run lint` | Run ESLint               |
-
-## Submission Notes
-
-### What Was Changed & Solved
-1. **Core Bug Fixes:**
-   - **Case-Insensitive Search:** Fixed username filtering in `src/utils/dataHelpers.ts` to use `.toLowerCase()` matching.
-   - **Engagement Rate Calculation:** Fixed the $100\times$ multiplier math bug in `ProfileDetailPage.tsx`.
-   - **Engagements Field:** Corrected the count field rendering total engagements as a formatted raw number (e.g. `1,320,790`) rather than formatting it as a rate.
-   - **URL Platform Fallback:** Resolved missing query param crashes by falling back to the metadata `user.type` values inside loaded profile JSON files.
-   - **Dynamic Import File Casing:** Solved dynamic lookup crash on case-sensitive filesystems by performing case-insensitive key searches in `src/utils/profileLoader.ts`.
-   - **Responsive Layout:** Replaced the layout-breaking fixed width `w-[700px]` with responsive layout grids (`w-full max-w-xl`).
-   - **Wildcard Catch-All Route:** Added a catch-all route redirecting invalid URLs back to home.
-   - **Dead Code Cleanup:** Deleted the unused/unimported `SearchBar.tsx` component.
-2. **State Management (Zustand):**
-   - Built a custom store at `src/store/useStore.ts` utilizing Zustand's `persist` middleware for automatic `localStorage` synchronization. Added strict duplicate check validations.
-3. **UI/UX Redesign:**
-   - Added a sliding sidebar drawer (`SelectedSidebar.tsx`) to manage selection lists.
-   - Designed responsive cards with premium platform brand colors and custom glassmorphism styling tokens.
-   - Created a sticky header navigation bar containing selected counts and animated indicators.
-4. **Reusable Common UI Components:**
-   - **Avatar (`common/Avatar.tsx`):** Automated image load error handling; dynamically parses name initials and applies a hashed gradient background as a fallback.
-   - **StatCard (`common/StatCard.tsx`):** Unified metadata cards display.
-   - **Button (`common/Button.tsx`):** Premium button component supporting ghost, outline, and loading indicator states.
-5. **Performance & Optimization:**
-   - Removed state-induced page-wide click counters (`clickCount`), substituting them with `useRef`.
-   - Removed prop-drilled `searchQuery` keys to avoid unnecessary rendering loops on character inputs.
-   - Utilized React's `memo` and `useCallback` to enforce rendering isolation.
-
-### Libraries Added
-- **Zustand** (`^5.0.3`): Exclusively used for robust, persistent state management.
-
-### Assumptions & Trade-Offs
-- **Platform Detection:** In selected lists, the profile summary data lacks platform identifiers. Rather than modifying the JSON structure, we wrote a helper parsing the social profiles' domain URLs (`instagram.com`, `youtube.com`, `tiktok.com`) to dynamically detect brand contexts.
-- **Verbatim Module Syntax:** Kept the project configuration strict, modifying imports to type-only declarations to enforce compiler directives.
-
-### Remaining Improvements
-- Add search result debouncing on input fields.
-- Integrate drag-and-drop ordering inside the Selected List panel.
-
+| Command | Description |
+|---|---|
+| `npm run dev` | Start development server |
+| `npm run build` | TypeScript check + Vite production build |
+| `npm run lint` | Run ESLint |
+| `npm run preview` | Preview production build locally |

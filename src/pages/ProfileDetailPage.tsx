@@ -7,267 +7,232 @@ import { formatEngagementRate, formatNumber } from "@/utils/formatters";
 import { loadProfileByUsername } from "@/utils/profileLoader";
 import { useStore } from "@/store/useStore";
 import { Avatar } from "@/components/common/Avatar";
-import { StatCard } from "@/components/common/StatCard";
 import { Button } from "@/components/common/Button";
 import { getInfluencerMeta, PLATFORM_BRANDS } from "@/constants";
-import { Users, TrendingUp, FileText, Heart, MessageSquare, Play, Zap, ArrowLeft, ExternalLink, Check, Plus } from "lucide-react";
+import {
+  Users, TrendingUp, FileText, Heart, MessageSquare, Play, Zap,
+  ArrowLeft, ExternalLink, Check, Plus,
+} from "lucide-react";
 import { motion } from "framer-motion";
 import { PlatformBadge } from "@/components/common/PlatformBadge";
 
-function formatFollowersDetail(count: number) {
-  if (count >= 1000000) return (count / 1000000).toFixed(2) + "M";
-  if (count >= 1000) return (count / 1000).toFixed(1) + "K";
+function fmt(count: number) {
+  if (count >= 1_000_000) return (count / 1_000_000).toFixed(2) + "M";
+  if (count >= 1_000) return (count / 1_000).toFixed(1) + "K";
   return count.toLocaleString();
 }
 
 export function ProfileDetailPage() {
   const { username } = useParams<{ username: string }>();
   const [searchParams] = useSearchParams();
-  const [profileData, setProfileData] = useState<ProfileDetailResponse | null>(
-    null
-  );
+  const [profileData, setProfileData] = useState<ProfileDetailResponse | null>(null);
   const [loaded, setLoaded] = useState(false);
 
-  const addProfile = useStore((state) => state.addProfile);
-  const removeProfile = useStore((state) => state.removeProfile);
-  const selectedProfiles = useStore((state) => state.selectedProfiles);
+  const addProfile = useStore((s) => s.addProfile);
+  const removeProfile = useStore((s) => s.removeProfile);
+  const selectedProfiles = useStore((s) => s.selectedProfiles);
 
   useEffect(() => {
     if (!username) return;
-
-    loadProfileByUsername(username).then((data) => {
-      setProfileData(data);
-      setLoaded(true);
-    });
+    loadProfileByUsername(username).then((d) => { setProfileData(d); setLoaded(true); });
   }, [username]);
 
-  if (!username) {
-    return (
-      <Layout>
-        <div className="py-12">
-          <p className="text-red-500 mb-4">Invalid profile username specified</p>
-          <Link to="/">
-            <Button variant="outline">Back to Search</Button>
-          </Link>
-        </div>
-      </Layout>
-    );
-  }
+  if (!username) return (
+    <Layout><div className="py-12 text-center">
+      <p className="text-red-500 mb-4">Invalid username</p>
+      <Link to="/"><Button variant="outline">Back to Search</Button></Link>
+    </div></Layout>
+  );
 
-  if (!loaded) {
-    return (
-      <Layout title={`@${username}`}>
-        {/* Shimmer loading layout skeletons */}
-        <div className="max-w-4xl mx-auto py-12 animate-pulse space-y-8">
-          <div className="bg-card border border-border rounded-3xl overflow-hidden text-left flex flex-col relative">
-            <div className="h-40 sm:h-48 w-full bg-zinc-200 dark:bg-zinc-800" />
-            <div className="px-6 pb-6 sm:px-8 sm:pb-8 flex flex-col md:flex-row gap-6 md:gap-8 items-start relative z-10 -mt-12 sm:-mt-16">
-              <div className="h-28 w-28 sm:h-32 sm:w-32 bg-zinc-200 dark:bg-zinc-800 rounded-full border-4 border-white dark:border-zinc-900 mx-auto md:mx-0 flex-shrink-0" />
-              <div className="flex-1 w-full pt-16 md:pt-20 space-y-4">
-                <div className="h-8 w-48 bg-zinc-200 dark:bg-zinc-800 rounded-lg" />
-                <div className="h-4 w-72 bg-zinc-200 dark:bg-zinc-800 rounded-lg" />
-              </div>
-            </div>
-          </div>
-          <div className="space-y-4">
-            <div className="h-4 w-36 bg-zinc-200 dark:bg-zinc-800 rounded-md" />
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="h-32 bg-zinc-100 dark:bg-zinc-800/40 border border-zinc-200/50 dark:border-white/[0.04] rounded-2xl sm:col-span-3" />
-              {[1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="h-28 bg-zinc-100 dark:bg-zinc-800/40 border border-zinc-200/50 dark:border-white/[0.04] rounded-2xl" />
-              ))}
-            </div>
+  if (!loaded) return (
+    <Layout>
+      <div className="max-w-6xl mx-auto animate-pulse space-y-4 py-4">
+        <div className="h-4 w-28 bg-zinc-200 dark:bg-zinc-800 rounded" />
+        <div className="grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-5">
+          <div className="h-[500px] bg-zinc-100 dark:bg-zinc-800/40 rounded-3xl" />
+          <div className="grid grid-cols-2 gap-4">
+            {[1,2,3,4,5,6].map(i => <div key={i} className="h-32 bg-zinc-100 dark:bg-zinc-800/40 rounded-2xl" />)}
           </div>
         </div>
-      </Layout>
-    );
-  }
+      </div>
+    </Layout>
+  );
 
-  if (!profileData) {
-    return (
-      <Layout title={`@${username}`}>
-        <div className="max-w-md mx-auto py-12 text-center">
-          <p className="text-red-600 mb-6 font-semibold">
-            Could not load profile details for "{username}"
-          </p>
-          <Link to="/">
-            <Button variant="primary">Back to search</Button>
-          </Link>
-        </div>
-      </Layout>
-    );
-  }
+  if (!profileData) return (
+    <Layout><div className="max-w-md mx-auto py-12 text-center">
+      <p className="text-red-600 mb-6 font-semibold">Could not load "{username}"</p>
+      <Link to="/"><Button variant="primary">Back to search</Button></Link>
+    </div></Layout>
+  );
 
   const user: FullUserProfile = profileData.data.user_profile;
   const platform = (searchParams.get("platform") || user.type || "unknown") as Platform;
   const isSelected = selectedProfiles.some((p) => p.user_id === user.user_id);
 
-  const handleAddToggle = () => {
-    if (isSelected) {
-      removeProfile(user.user_id);
-    } else {
-      addProfile(user);
-    }
-  };
+  const toggle = () => isSelected ? removeProfile(user.user_id) : addProfile(user);
 
   const meta = getInfluencerMeta(user.username);
-  const brand = PLATFORM_BRANDS[platform] || {
-    label: platform,
-    color: "bg-zinc-550",
-    text: "text-zinc-650 dark:text-zinc-400",
-    bg: "bg-zinc-100 dark:bg-zinc-850",
-  };
+  const brand = PLATFORM_BRANDS[platform] || { label: platform };
+
+  const stats = [
+    { label: "Followers", value: fmt(user.followers), icon: <Users className="h-5 w-5 text-purple-500" />, highlight: true },
+    user.engagement_rate != null && { label: "Engagement Rate", value: formatEngagementRate(user.engagement_rate), icon: <TrendingUp className="h-4 w-4" /> },
+    user.posts_count != null && { label: "Total Posts", value: formatNumber(user.posts_count), icon: <FileText className="h-4 w-4" /> },
+    user.avg_likes != null && { label: "Avg Likes", value: fmt(user.avg_likes), icon: <Heart className="h-4 w-4" /> },
+    user.avg_comments != null && { label: "Avg Comments", value: formatNumber(user.avg_comments), icon: <MessageSquare className="h-4 w-4" /> },
+    user.avg_views != null && user.avg_views > 0 && { label: "Avg Views", value: fmt(user.avg_views), icon: <Play className="h-4 w-4" /> },
+    user.engagements != null && { label: "Total Engagements", value: formatNumber(user.engagements), icon: <Zap className="h-4 w-4" /> },
+  ].filter(Boolean) as { label: string; value: string; icon: React.ReactNode; highlight?: boolean }[];
 
   return (
     <Layout>
       <motion.div
-        initial={{ opacity: 0, y: 15 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="max-w-4xl mx-auto"
+        transition={{ duration: 0.35 }}
+        className="max-w-6xl mx-auto text-left w-full"
       >
-        {/* Back navigation link */}
-        <div className="text-left mb-6">
-          <Link to="/" className="inline-flex items-center gap-1.5 text-sm font-semibold text-purple-600 hover:text-purple-800 transition-colors">
-            <ArrowLeft className="h-4 w-4" />
-            <span>Back to Search</span>
-          </Link>
-        </div>
+        {/* Back link */}
+        <Link
+          to="/"
+          className="inline-flex items-center gap-1.5 text-sm font-semibold text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 transition-colors mb-4"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to Search
+        </Link>
 
-        {/* Profile Card details wrapper */}
-        <div className="bg-card border border-border rounded-3xl shadow-sm overflow-hidden text-left flex flex-col relative mt-2">
-          
-          {/* Cover Banner */}
-          <div className="h-40 sm:h-48 w-full relative overflow-hidden">
-            <div className={`absolute inset-0 bg-gradient-to-r ${meta.brandColor} opacity-90`} />
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:20px_20px]" />
-            <div className="absolute inset-0 bg-black/10 dark:bg-black/35 backdrop-blur-[1px]" />
-          </div>
+        {/* Main split layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-6">
 
-          <div className="px-6 pb-6 sm:px-8 sm:pb-8 flex flex-col md:flex-row gap-6 md:gap-8 items-start relative z-10">
-            {/* Left side: Avatar stacked over banner & toggle button */}
-            <div className="flex flex-col items-center md:items-start gap-4 -mt-16 sm:mt-[-80px] relative z-20 w-full md:w-auto">
-              <div className={`p-1.5 rounded-full bg-gradient-to-tr ${meta.brandColor} shadow-lg`}>
-                <Avatar
-                  src={user.picture}
-                  name={user.fullname}
-                  className="w-28 h-28 sm:w-32 sm:h-32 border-4 border-white dark:border-zinc-900"
-                />
-              </div>
-              
-              <Button
-                onClick={handleAddToggle}
-                variant={isSelected ? "primary" : "secondary"}
-                icon={isSelected ? <Check className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
-                className={`w-full justify-center transition-all duration-300 ${isSelected ? "bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white border-transparent shadow-md shadow-emerald-500/10" : ""}`}
-              >
-                {isSelected ? "Saved to List" : "Save Creator"}
-              </Button>
+          {/* ── LEFT: Profile card ── */}
+          <div className="rounded-3xl border border-border bg-card shadow-sm flex flex-col relative">
+
+            {/* Gradient banner */}
+            <div className={`h-36 w-full relative flex-shrink-0 rounded-t-3xl overflow-hidden bg-gradient-to-br ${meta.brandColor}`}>
+              <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.07)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.07)_1px,transparent_1px)] bg-[size:20px_20px]" />
+              <div className="absolute inset-0 bg-black/15 dark:bg-black/30" />
             </div>
 
-            {/* Right side: Detail metadata list */}
-            <div className="flex-1 min-w-0 w-full pt-4">
-              <div className="flex flex-wrap items-center justify-between gap-4">
-                <div>
-                  <h2 className="text-2xl sm:text-3xl font-black text-foreground flex items-center gap-2 m-0">
-                    {user.fullname}
-                    <VerifiedBadge verified={user.is_verified} />
-                  </h2>
-                  <div className="text-zinc-500 dark:text-zinc-400 mt-1 font-medium text-sm">
-                    @{user.username}
-                  </div>
+            {/* Avatar — sits exactly half-in, half-out of the banner */}
+            <div className="absolute left-1/2 -translate-x-1/2" style={{ top: '96px' }}>
+              <div className={`p-[3px] rounded-full bg-gradient-to-tr ${meta.brandColor} shadow-xl`} style={{ padding: '3px' }}>
+                <div className="rounded-full border-4 border-card dark:border-zinc-950 overflow-hidden w-24 h-24">
+                  <Avatar
+                    src={user.picture}
+                    name={user.fullname}
+                    className="w-24 h-24"
+                  />
                 </div>
+              </div>
+            </div>
 
-                <div className="flex items-center gap-2">
-                  <PlatformBadge platform={platform as Platform} className="text-xs px-3 py-1.5 rounded-lg" />
-                  <span className="text-xs font-semibold px-3 py-1 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-350 rounded-lg">
-                    {meta.country}
-                  </span>
-                </div>
+            {/* Body — pt-16 to clear the avatar that overhangs */}
+            <div className="flex flex-col items-center text-center px-6 pb-6 flex-1 pt-16">
+
+              {/* Name */}
+              <h2 className="mt-3 text-2xl font-black text-foreground flex items-center gap-1.5 m-0 leading-tight">
+                {user.fullname}
+                <VerifiedBadge verified={user.is_verified} />
+              </h2>
+              <p className="text-zinc-500 dark:text-zinc-400 text-sm font-medium mt-0.5">
+                @{user.username}
+              </p>
+
+              {/* Platform + Country badges */}
+              <div className="flex items-center gap-2 mt-3 flex-wrap justify-center">
+                <PlatformBadge platform={platform as Platform} className="text-xs px-2.5 py-1 rounded-lg" />
+                <span className="text-xs font-semibold px-2.5 py-1 bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 rounded-lg">
+                  {meta.country}
+                </span>
               </div>
 
               {/* Category */}
-              <div className="text-xs font-black text-purple-600 dark:text-purple-400 uppercase tracking-widest mt-4">
+              <p className="text-[10px] font-black text-purple-600 dark:text-purple-400 uppercase tracking-widest mt-2">
                 {meta.category}
+              </p>
+
+              {/* Followers highlight pill */}
+              <div className="mt-4 w-full px-4 py-3 rounded-2xl bg-gradient-to-r from-purple-500/[0.07] to-indigo-500/[0.07] border border-purple-500/20 dark:border-purple-500/10 flex items-center justify-between">
+                <div className="flex items-center gap-2 text-zinc-500 dark:text-zinc-400">
+                  <Users className="h-4 w-4 text-purple-500" />
+                  <span className="text-xs font-semibold">Followers</span>
+                </div>
+                <span className="text-xl font-black text-zinc-900 dark:text-zinc-50">
+                  {fmt(user.followers)}
+                </span>
               </div>
 
-              {/* Bio Description */}
+              {/* Bio */}
               {user.description && (
-                <p className="mt-3.5 text-sm leading-relaxed text-zinc-650 dark:text-zinc-350 font-normal">
+                <p className="mt-4 text-xs leading-relaxed text-zinc-500 dark:text-zinc-400 line-clamp-4 text-left w-full">
                   {user.description}
                 </p>
               )}
 
-              {/* View platform profile external link */}
+              {/* External link */}
               {user.url && (
                 <a
                   href={user.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 mt-4 text-xs font-bold text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 transition-colors"
+                  className="inline-flex items-center gap-1.5 mt-3 text-xs font-bold text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 transition-colors"
                 >
-                  <span>View on {brand.label}</span>
+                  View on {brand.label}
                   <ExternalLink className="h-3.5 w-3.5" />
                 </a>
               )}
 
-              {/* Stats Grid Dashboard */}
-              <div className="mt-8">
-                <h3 className="text-xs font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-4">
-                  Account Statistics
-                </h3>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                  <StatCard
-                    label="Followers"
-                    value={formatFollowersDetail(user.followers)}
-                    icon={<Users className="h-5.5 w-5.5 text-purple-500" />}
-                    className="col-span-2 sm:col-span-3 bg-gradient-to-r from-purple-500/[0.04] to-indigo-500/[0.04] border-purple-500/20 dark:border-purple-500/10 shadow-sm py-6"
-                    description="Total content reach across platform network"
-                  />
-                  <StatCard
-                    label="Engagement Rate"
-                    value={formatEngagementRate(user.engagement_rate)}
-                    icon={<TrendingUp className="h-4 w-4" />}
-                  />
-                  {user.posts_count !== undefined && (
-                    <StatCard
-                      label="Total Posts"
-                      value={formatNumber(user.posts_count)}
-                      icon={<FileText className="h-4 w-4" />}
-                    />
-                  )}
-                  {user.avg_likes !== undefined && (
-                    <StatCard
-                      label="Avg Likes"
-                      value={formatFollowersDetail(user.avg_likes)}
-                      icon={<Heart className="h-4 w-4" />}
-                    />
-                  )}
-                  {user.avg_comments !== undefined && (
-                    <StatCard
-                      label="Avg Comments"
-                      value={formatNumber(user.avg_comments)}
-                      icon={<MessageSquare className="h-4 w-4" />}
-                    />
-                  )}
-                  {user.avg_views !== undefined && user.avg_views > 0 && (
-                    <StatCard
-                      label="Avg Views"
-                      value={formatFollowersDetail(user.avg_views)}
-                      icon={<Play className="h-4 w-4" />}
-                    />
-                  )}
-                  {user.engagements !== undefined && (
-                    <StatCard
-                      label="Total Engagements"
-                      value={formatNumber(user.engagements)}
-                      icon={<Zap className="h-4 w-4" />}
-                    />
-                  )}
-                </div>
+              {/* Save button pinned to bottom */}
+              <div className="mt-auto pt-5 w-full">
+                <Button
+                  onClick={toggle}
+                  variant={isSelected ? "primary" : "secondary"}
+                  icon={isSelected ? <Check className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+                  className={`w-full justify-center text-sm transition-all duration-300 ${
+                    isSelected
+                      ? "bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white border-transparent shadow-md shadow-emerald-500/15"
+                      : ""
+                  }`}
+                >
+                  {isSelected ? "Saved to List" : "Save Creator"}
+                </Button>
               </div>
             </div>
           </div>
+
+          {/* ── RIGHT: Stats panel ── */}
+          <div className="flex flex-col">
+            <h3 className="text-xs font-black uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-4">
+              📊 Account Statistics
+            </h3>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              {stats.map((stat) => (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className={`rounded-2xl border p-5 flex flex-col gap-2 ${
+                    stat.highlight
+                      ? "col-span-2 sm:col-span-3 bg-gradient-to-r from-purple-500/[0.05] to-indigo-500/[0.05] border-purple-500/20 dark:border-purple-500/10"
+                      : "bg-card border-border"
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-black text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">
+                      {stat.label}
+                    </span>
+                    <span className="text-zinc-400 dark:text-zinc-500">{stat.icon}</span>
+                  </div>
+                  <span className={`font-black text-foreground leading-none ${stat.highlight ? "text-4xl" : "text-2xl"}`}>
+                    {stat.value}
+                  </span>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
         </div>
       </motion.div>
     </Layout>

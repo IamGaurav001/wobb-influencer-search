@@ -19,7 +19,6 @@ function formatReach(count: number) {
 export function SearchPage() {
   const [platform, setPlatform] = useState<Platform>("instagram");
   const [searchQuery, setSearchQuery] = useState("");
-  const clickCountRef = useRef(0);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   // Keyboard shortcut command listener for ⌘ K / Ctrl K
@@ -50,9 +49,8 @@ export function SearchPage() {
     state.selectedProfiles.filter(p => getPlatformFromUrl(p.url) === platform).length
   );
 
-  const handleProfileClick = useCallback((username: string) => {
-    clickCountRef.current += 1;
-    console.log("Clicked profile:", username, "total clicks:", clickCountRef.current);
+  const handleProfileClick = useCallback(() => {
+    // Navigation handled inside ProfileCard
   }, []);
 
   const handlePlatformChange = useCallback((p: Platform) => {
