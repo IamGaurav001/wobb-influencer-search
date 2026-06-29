@@ -60,8 +60,8 @@ export function SearchPage() {
 
   return (
     <Layout>
-      {/* Premium Hero Section - reduced height by ~20% */}
-      <div className="relative pt-4 pb-8 overflow-hidden w-full">
+      {/* Premium Hero Section */}
+      <div className="relative pt-10 pb-12 overflow-hidden w-full">
         {/* Glow circles behind the Hero */}
         <div className="absolute top-0 left-1/4 glow-purple opacity-70 -z-10 translate-x-[-50%] translate-y-[-20%]" />
         <div className="absolute top-0 right-1/4 glow-indigo opacity-70 -z-10 translate-x-[50%] translate-y-[-20%]" />
@@ -116,26 +116,30 @@ export function SearchPage() {
         <StatCard
           label="Total Creators"
           value={allProfiles.length}
-          icon={<Users className="h-4.5 w-4.5 text-purple-500" />}
+          icon={<Users className="h-4.5 w-4.5" />}
           description="Indexed platform accounts"
+          accentColor="purple"
         />
         <StatCard
           label="Total Reach"
           value={formatReach(totalPlatformReach)}
-          icon={<TrendingUp className="h-4.5 w-4.5 text-blue-500" />}
+          icon={<TrendingUp className="h-4.5 w-4.5" />}
           description="Combined follower count"
+          accentColor="blue"
         />
         <StatCard
           label="Avg Engagement"
           value={(avgPlatformEngagement * 100).toFixed(2) + "%"}
-          icon={<Zap className="h-4.5 w-4.5 text-emerald-500" />}
+          icon={<Zap className="h-4.5 w-4.5" />}
           description="Mean platform interaction rate"
+          accentColor="emerald"
         />
         <StatCard
           label="Saved Creators"
           value={savedCount}
-          icon={<Bookmark className="h-4.5 w-4.5 text-pink-500" />}
+          icon={<Bookmark className="h-4.5 w-4.5" />}
           description="Shortlisted on this platform"
+          accentColor="pink"
         />
       </motion.div>
 

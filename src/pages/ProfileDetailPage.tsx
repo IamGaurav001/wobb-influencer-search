@@ -207,27 +207,35 @@ export function ProfileDetailPage() {
             </h3>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-              {stats.map((stat) => (
+              {stats.map((stat, i) => (
                 <motion.div
                   key={stat.label}
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className={`rounded-2xl border p-5 flex flex-col gap-2 ${
+                  transition={{ duration: 0.3, delay: i * 0.05 }}
+                  whileHover={{ y: -3 }}
+                  className={`rounded-2xl border p-5 flex flex-col gap-3 transition-all duration-200 ${
                     stat.highlight
-                      ? "col-span-2 sm:col-span-3 bg-gradient-to-r from-purple-500/[0.05] to-indigo-500/[0.05] border-purple-500/20 dark:border-purple-500/10"
-                      : "bg-card border-border"
+                      ? "col-span-2 sm:col-span-3 bg-gradient-to-r from-purple-500/[0.06] to-indigo-500/[0.06] border-purple-500/20 dark:border-purple-500/10 border-t-2 border-t-purple-500/60"
+                      : "bg-card border-border border-t-2 border-t-zinc-300/60 dark:border-t-white/[0.08] hover:border-t-purple-400/50 dark:hover:border-t-purple-500/30"
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-[10px] font-black text-zinc-400 dark:text-zinc-500 uppercase tracking-widest">
                       {stat.label}
                     </span>
-                    <span className="text-zinc-400 dark:text-zinc-500">{stat.icon}</span>
+                    <span className={`p-1.5 rounded-lg ${stat.highlight ? "bg-purple-500/10 text-purple-500" : "bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400"}`}>
+                      {stat.icon}
+                    </span>
                   </div>
-                  <span className={`font-black text-foreground leading-none ${stat.highlight ? "text-4xl" : "text-2xl"}`}>
+                  <span className={`font-black text-foreground leading-none tracking-tight ${stat.highlight ? "text-5xl" : "text-3xl"}`}>
                     {stat.value}
                   </span>
+                  {stat.highlight && (
+                    <div className="w-full h-1 rounded-full bg-purple-200/40 dark:bg-purple-500/10 overflow-hidden">
+                      <div className="h-full w-3/4 rounded-full bg-gradient-to-r from-purple-500 to-indigo-500 opacity-60" />
+                    </div>
+                  )}
                 </motion.div>
               ))}
             </div>

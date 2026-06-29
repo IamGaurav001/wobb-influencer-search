@@ -156,8 +156,16 @@ export function Layout({ children, title }: LayoutProps) {
       </main>
 
       {/* Footer */}
-      <footer className="w-full border-t border-border bg-surface/50 py-6 text-center text-xs text-muted">
-        <p>© 2026 CreatorScope. All rights reserved.</p>
+      <footer className="w-full border-t border-border bg-surface/40 backdrop-blur-sm py-5 mt-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-zinc-400 dark:text-zinc-500">
+          <span className="font-semibold">
+            © 2026 <span className="text-purple-600 dark:text-purple-400 font-bold">CreatorScope</span>
+          </span>
+          <span className="hidden sm:block">·</span>
+          <span>Built with React · TypeScript · Zustand · Framer Motion</span>
+          <span className="hidden sm:block">·</span>
+          <span>Designed & Developed by <span className="font-bold text-zinc-600 dark:text-zinc-300">Gaurav Kumar Dubey</span></span>
+        </div>
       </footer>
 
       {/* Selected Influencers Drawer Panel */}

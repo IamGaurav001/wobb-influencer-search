@@ -52,10 +52,10 @@ export const ProfileCard = memo(function ProfileCard({
     <motion.div
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -5, scale: 1.005 }}
-      transition={{ duration: 0.25 }}
+      whileHover={{ y: -6, scale: 1.01 }}
+      transition={{ duration: 0.2, ease: "easeOut" }}
       onClick={handleClick}
-      className="bg-gradient-to-b from-white to-zinc-50/50 dark:from-zinc-900 dark:to-zinc-950/70 border border-zinc-200/60 dark:border-white/[0.04] rounded-3xl p-5 flex flex-col justify-between gap-5 cursor-pointer hover:border-purple-500/40 dark:hover:border-purple-500/30 hover:shadow-xl hover:shadow-purple-500/[0.02] dark:hover:shadow-purple-500/[0.02] transition-all duration-300 text-center relative"
+      className="bg-gradient-to-b from-white to-zinc-50/50 dark:from-zinc-900 dark:to-zinc-950/70 border border-zinc-200/60 dark:border-white/[0.04] rounded-3xl p-5 flex flex-col justify-between gap-5 cursor-pointer hover:border-purple-400/50 dark:hover:border-purple-500/40 hover:shadow-2xl hover:shadow-purple-500/[0.08] dark:hover:shadow-purple-500/[0.06] transition-all duration-200 text-center relative"
     >
       {/* Category / Platform Header Tag */}
       <div className="flex justify-between items-center w-full">
